@@ -12,7 +12,28 @@ def main():
     Main function
     """
     args = get_cli_args()
-    infile = args.infile
+    infile = args.INFILE
+
+    # Output files
+    infile = "chr21_genes.txt"
+
+    # Get file object with get_fh
+    fh_in = my_io.get_fh(infile, "r")
+
+    # Initiate a loop for inputs
+    while True:
+        GI = input("Enter gene name of interest. Type quit to exit: ")
+
+        if GI.lower() == "quit":
+            print("Thanks for querying the data.")
+            break
+
+        if GI in D:
+            print(GI + " " + "found! Here is the description:")
+            print(D[GI])
+
+        else:
+            print("Not a valid gene name")
 
 # Initiate a list to store data from file
 GL = []
@@ -46,20 +67,6 @@ D = dict.fromkeys(GS)
 for i in range(len(D)):
     D[GS[i]] = GD[i]
 
-# Initiate a loop for inputs
-while True:
-    GI = input("Enter gene name of interest. Type quit to exit: ")
-
-    if GI.lower() == "quit":
-        print("Thanks for querying the data.")
-        break
-
-    if GI in D:
-        print(GI + " " + "found! Here is the description:")
-        print(D[GI])
-
-    else:
-        print("Not a valid gene name")
 
 def get_cli_args():
     """
@@ -75,4 +82,7 @@ def get_cli_args():
                         help='Path to the file to open',
                         required=True)
 
-    return parser.parse.args()
+    return parser.parse_args()
+
+if __name__ == '__main__':
+    main()
