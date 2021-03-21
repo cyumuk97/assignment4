@@ -8,6 +8,3 @@
 4.2	Predicted genes corresponding to spliced EST(s) but which failed to be recognized by exon prediction programs.
 4.3	Predicted genes composed only of a pattern of consistent exons without any matches to ETS(s) or cDNA.
 5	Pseudogenes may be regarded as gene-derived DNA sequences that are no longer capable of being expressed as protein products.
-
-
-
