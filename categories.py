@@ -6,7 +6,7 @@ Counts how many genes are in each category in chr21_genes.txt
 """
 
 import argparse
-import os
+import os.path
 from assignment4 import my_io
 
 def main():
@@ -80,16 +80,19 @@ def main():
     # Path to output directory
 
     # Save path
-    SP = '/OUTPUT'
+    SP = 'OUTPUT/'
 
     # Out path
     OP = os.path.join(SP, outfile)
     print(OP)
 
     # Write to file
-    with open(OP, "w") as out:
-        out.write(final)
-    out.close()
+    fh_out = my_io.get_fh(outfile, "w")
+    fh_out.write(final)
+    fh_out.close()
+    #with open(OP, "w") as out:
+     #   out.write(final)
+   # out.close()
 
 def get_cli_args():
     """
