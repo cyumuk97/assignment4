@@ -9,105 +9,113 @@ import argparse
 import os
 from assignment4 import my_io
 
-# Initiate a list to store data from file
-GL = []
+def main():
+    """
+    Main function
+    """
+    args = get_cli_args()
+    I1 = args.INFILE1
+    I2 = args.INFILE2
 
-# Initiate a list to store gene categories
-GC = []
+    # Input files
+    I1 = "chr21_genes.txt"
+    I2 = "chr21_genes_categories.txt"
 
-# Initiate a dictionary
-GD = {}
+    # Output file
+    outfile = "categories.txt"
 
-# Open file and store data in gene list
-I = my_io.get_fh("chr21_genes.txt", "r")
+    # Get file objects with get_fh
+    fh_in1 = my_io.get_fh(I1, "r")
+    fh_in2 = my_io.get_fh(I2, "r")
+   # fh_out = my_io.get_fh(outfile, "w")
 
-for line in I:
-    GL.append(line.split("\t"))
+    # Initiate a list to store data from file
+    GL = []
 
-I.close()
+    # Initiate a list to store gene categories
+    GC = []
 
-# Store gene categories
-for i in range(1, len(GL)):
-    GC.append(GL[i][2].replace('\n', ''))
+    # Initiate a dictionary
+    GD = {}
 
-# Sort gene categories
-GC.sort()
+    # Store lines in list
+    for line in fh_in1:
+        GL.append(line.split("\t"))
 
-# Initiate a list to store singular categories
-SC = []
+    fh_in1.close()
 
-# Loop through gene categories
-for i in range(1, len(GC)):
-    if GC[i] not in SC:
-        SC.append(GC[i])
+    # Store gene categories
+    for i in range(1, len(GL)):
+        GC.append(GL[i][2].replace('\n', ''))
 
-# Initiate a dictionary for category meanings
-GM = dict.fromkeys(SC)
+    # Sort gene categories
+    GC.sort()
 
-# Gene meanings
-M11 = "Genes with 100% identity over a complete cDNA with defined functional\
-        association (for example, transcription factor, kinase)."
+    # Store categories in category dictionary
+    for category in GC[1:]:
+        GD[category] = GD.get(category,0) + 1
 
-M12 = "Genes with 100% identity over a complete cDNA corresponding to a gene\
-        of unknown function (for example, some of the KIAA series of large cDNAs)."
+    # Create a list for the file of gene meanings
+    GM = []
 
-M21 = "Genes showing similarity or homology to a characterized cDNA from any\
-        organism (25–100% amino-acid identity)."
+    # Store lines in gene meaning list
+    for line in fh_in2:
+        GM.append(line.split("\t"))
 
-M22 = "Genes with similarity to a putative ORF predicted in silico from the\
-        genomic sequence of any organism but which currently lacks\
-        experimental verification."
+    fh_in2.close()
 
-M31 = "Genes with amino-acid similarity confined to a protein region specifying\
-        a functional domain (for example, zinc fingers, immunoglobulin domains)."
+    # Turn gene meanings list into a dictionary
+    DM = dict(GM)
 
-M32 = "Genes with amino-acid similarity confined to regions of a known protein\
-        without known functional association."
+    # Prepare output variables
+    header = "Category\tOccurrence\tDescription"
+    info = ""
 
-M41 = "Predicted genes composed of a pattern of two or more consistent exons\
-        (located within <20 kb) and supported by spliced EST match(es)."
+    # Add to info
+    for (k, v) in GD.items():
+        info += str(k) + "\t" + str(v) + "\t" + str(DM[k]) + "\n"
 
-M42 = "Predicted genes corresponding to spliced EST(s) but which failed to\
-        be recognized by exon prediction programs."
+    # Create final output
+    final = header + "\n" + info
 
-M43 = "Predicted genes composed only of a pattern of consistent exons\
-        without any matches to ETS(s) or cDNA."
+    # Path to output directory
 
-M5 = "Pseudogenes may be regarded as gene-derived DNA sequences that\
-        are no longer capable of being expressed as protein products."
+    # Save path
+    SP = '/OUTPUT'
 
-# List of gene meanings
-S = [M11, M12, M21, M22, M31, M32, M41, M42, M43, M5]
+    # Out path
+    OP = os.path.join(SP, outfile)
+    print(OP)
 
-# Store meanings in gene meanings dictionary
-for i in range(len(GM)):
-    GM[SC[i]] = S[i]
+    #if not os.path.exists(os.path.dirname(OP)):
+       # os.makedirs(os.path.dirname(OP), mode=0o777)
 
-# Store categories in category dictionary
-for category in GC[1:]:
-    GD[category] = GD.get(category,0) + 1
+    # Write to file
+    # fh_out = my_io.get_fh(OP, "w")
+    with open(OP, "w") as out:
+        out.write(final)
+    out.close()
 
-# Prepare output variables
-header = "Category\tOccurrence\tDescription"
-info = ""
+def get_cli_args():
+    """
+    Gets command line options using argparse
+    """
+    parser = argparse.ArgumentParser(
+            description='Combine on gene name and count the category occurrence')
 
-# Add to info
-for (k, v) in GD.items():
-    info += str(k) + "\t" + str(v) + "\t" + str(GM[k]) + "\n"
+    parser.add_argument('-i1', '--infile1',
+                        dest='INFILE1',
+                        type=str,
+                        help='Path to the gene description file to open',
+                        required=True)
 
-# Create final output
-final = header + "\n" + info
+    parser.add_argument('-i2', '--infile2',
+                        dest='INFILE2',
+                        type=str,
+                        help='Path to the gene category to open',
+                        required=True)
 
-# Prepare output file
-O = my_io.get_fh("categories.txt", "w")
+    return parser.parse_args()
 
-# Path to output directory
-
-# Save path
-SP = 'assignment4/OUTPUT'
-
-# Out path
-OP = os.path.join(SP,O)
-
-# Write final output to file
-
+if __name__ == '__main__':
+    main()

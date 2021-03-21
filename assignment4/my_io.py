@@ -6,7 +6,7 @@ Opens files with get_fh function
 """
 
 
-def get_fh(filename, openfile):
+def get_fh(filename=None, openfile=None):
     """
     Opens an input file and passes back a file object
     """
