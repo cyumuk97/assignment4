@@ -83,10 +83,11 @@ def main():
     store = ""
     for elem in C:
         store += str(elem) + "\n"
+    
     # Write to file
-    with open(OP, "w") as out:
-        out.write(store)
-    out.close()
+    fh_out = my_io.get_fh(outfile, "w")
+    fh_out.write(store)
+    fh_out.close()
 
 def get_cli_args():
     """

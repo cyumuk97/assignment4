@@ -90,9 +90,6 @@ def main():
     fh_out = my_io.get_fh(outfile, "w")
     fh_out.write(final)
     fh_out.close()
-    #with open(OP, "w") as out:
-     #   out.write(final)
-   # out.close()
 
 def get_cli_args():
     """
