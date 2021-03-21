@@ -20,6 +20,9 @@ def main():
     # Get file object with get_fh
     fh_in = my_io.get_fh(infile, "r")
 
+    # Get Dictionary
+    D = get_gene_names(fh_in)
+
     # Initiate a loop for inputs
     while True:
         GI = input("Enter gene name of interest. Type quit to exit: ")
@@ -35,38 +38,41 @@ def main():
         else:
             print("Not a valid gene name")
 
-# Initiate a list to store data from file
-GL = []
+def get_gene_names(filename):
 
-# Initiate a list to store gene symbols
-GS = []
+    """
+    Returns a dictionary that stores gene names
+    """
+    
+    # Initiate a list to store data from file
+    GL = []
 
-# Initiate a list to store gene descriptions
-GD = []
+    # Initiate a list to store gene symbols
+    GS = []
 
-# Open the file and store the information in gene_list
-I = my_io.get_fh("chr21_genes.txt", "r")
+    # Initiate a list to store gene descriptions
+    GD = []
 
-for line in I:
-    GL.append(line.split("\t"))
+    # Open the file and store the information in gene_list
+    for line in filename:
+        GL.append(line.split("\t"))
 
-I.close()
+    # Store gene symbols in gene_symbol
+    for i in range(1, len(GL)):
+        GS.append(GL[i][0])
 
-# Store gene symbols in gene_symbol
-for i in range(1, len(GL)):
-    GS.append(GL[i][0])
+    # Store gene descriptions in gene_description
+    for j in range(1, len(GL)):
+        GD.append(GL[j][1])
 
-# Store gene descriptions in gene_description
-for j in range(1, len(GL)):
-    GD.append(GL[j][1])
+    # Initiate a dictionary
+    D = dict.fromkeys(GS)
 
-# Initiate a dictionary
-D = dict.fromkeys(GS)
+    # Enter values to dictionary
+    for i in range(len(D)):
+        D[GS[i]] = GD[i]
 
-# Enter values to dictionary
-for i in range(len(D)):
-    D[GS[i]] = GD[i]
-
+    return D
 
 def get_cli_args():
     """

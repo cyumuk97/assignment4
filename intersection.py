@@ -27,20 +27,51 @@ def main():
     fh_in1 = my_io.get_fh(I1, "r")
     fh_in2 = my_io.get_fh(I2, "r")
 
+    # Get sets
+    U21, UH, C = get_sets(fh_in1, fh_in2)
+
+    # Prepare output variables
+    unique_21 = "Number of unique gene names in chr21_genes.txt: " + str(len(U21))
+    unique_hugo = "Number of unique gene names in HUGO_genes.txt: " + str(len(UH))
+    common = "Number of common gene symbols found: " + str(len(C))
+    end_line = "Output stored in OUTPUT/intersection_output.txt"
+
+    final = unique_21 + "\n" + unique_hugo + "\n" + common + "\n" + end_line
+
+    # Path to output directory
+    
+    # Save path
+    SP = '/OUTPUT'
+
+    # Out path
+    OP = os.path.join(SP, outfile)
+                    
+    # Store set elements
+    store = ""
+    for elem in C:
+        store += str(elem) + "\n"
+                                                
+    # Write to file
+    fh_out = my_io.get_fh(outfile, "w")
+    fh_out.write(store)
+    fh_out.close()
+
+def get_sets(file21, hugo):
+
+    """
+    Returns sets containing common and unique gene names
+    """
+
     # Initiate lists for chr_21 and HUGO
     C21 = []
     H = []
 
     # Store the lines of text files in appropriate lists
-    for line in fh_in1:
+    for line in file21:
         C21.append(line.split("\t"))
 
-    fh_in1.close()
-
-    for line in fh_in2:
+    for line in hugo:
         H.append(line.split("\t"))
-
-    fh_in2.close()
 
     # Initiate sets
     S21 = set()
@@ -62,34 +93,10 @@ def main():
     # Common symbols
     C = S21 & SH
 
-    # Prepare output variables
-    unique_21 = "Number of unique gene names in chr21_genes.txt: " + str(len(U21))
-    unique_hugo = "Number of unique gene names in HUGO_genes.txt: " + str(len(UH))
-    common = "Number of common gene symbols found: " + str(len(C))
-    end_line = "Output stored in OUTPUT/intersection_output.txt"
-
-    final = unique_21 + "\n" + unique_hugo + "\n" + common + "\n" + end_line
-    print(final)
-
-    # Path to output directory
-
-    # Save path
-    SP = '/OUTPUT'
-
-    # Out path
-    OP = os.path.join(SP, outfile)
-    
-    # Store set elements
-    store = ""
-    for elem in C:
-        store += str(elem) + "\n"
-    
-    # Write to file
-    fh_out = my_io.get_fh(outfile, "w")
-    fh_out.write(store)
-    fh_out.close()
+    return U21, UH, C
 
 def get_cli_args():
+
     """
     Gets command line options using argparse
     """

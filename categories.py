@@ -28,6 +28,38 @@ def main():
     fh_in1 = my_io.get_fh(I1, "r")
     fh_in2 = my_io.get_fh(I2, "r")
 
+    # Get dictionaries
+    GD, DM = gene_count(fh_in1, fh_in2)
+
+    # Prepare output variables
+    header = "Category\tOccurrence\tDescription"
+    info = ""
+
+    # Add to info
+    for (k, v) in GD.items():
+        info += str(k) + "\t" + str(v) + "\t" + str(DM[k]) + "\n"
+
+    # Create final output
+    final = header + "\n" + info
+
+    # Path to output directory
+    
+    # Save path
+    SP = 'OUTPUT/'
+
+    # Out path
+    OP = os.path.join(SP, outfile)
+
+    # Write to file
+    fh_out = my_io.get_fh(outfile, "w")
+    fh_out.write(final)
+    fh_out.close()
+
+def gene_count(category, meaning):
+    """
+    Returns two dictionaries with gene meanings and gene categories
+    """
+
     # Initiate a list to store data from file
     GL = []
 
@@ -38,10 +70,8 @@ def main():
     GD = {}
 
     # Store lines in list
-    for line in fh_in1:
+    for line in category:
         GL.append(line.split("\t"))
-
-    fh_in1.close()
 
     # Store gene categories
     for i in range(1, len(GL)):
@@ -58,38 +88,13 @@ def main():
     GM = []
 
     # Store lines in gene meaning list
-    for line in fh_in2:
+    for line in meaning:
         GM.append(line.split("\t"))
-
-    fh_in2.close()
 
     # Turn gene meanings list into a dictionary
     DM = dict(GM)
 
-    # Prepare output variables
-    header = "Category\tOccurrence\tDescription"
-    info = ""
-
-    # Add to info
-    for (k, v) in GD.items():
-        info += str(k) + "\t" + str(v) + "\t" + str(DM[k]) + "\n"
-
-    # Create final output
-    final = header + "\n" + info
-
-    # Path to output directory
-
-    # Save path
-    SP = 'OUTPUT/'
-
-    # Out path
-    OP = os.path.join(SP, outfile)
-    print(OP)
-
-    # Write to file
-    fh_out = my_io.get_fh(outfile, "w")
-    fh_out.write(final)
-    fh_out.close()
+    return GD, DM
 
 def get_cli_args():
     """
