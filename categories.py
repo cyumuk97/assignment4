@@ -27,7 +27,6 @@ def main():
     # Get file objects with get_fh
     fh_in1 = my_io.get_fh(I1, "r")
     fh_in2 = my_io.get_fh(I2, "r")
-   # fh_out = my_io.get_fh(outfile, "w")
 
     # Initiate a list to store data from file
     GL = []
@@ -87,11 +86,7 @@ def main():
     OP = os.path.join(SP, outfile)
     print(OP)
 
-    #if not os.path.exists(os.path.dirname(OP)):
-       # os.makedirs(os.path.dirname(OP), mode=0o777)
-
     # Write to file
-    # fh_out = my_io.get_fh(OP, "w")
     with open(OP, "w") as out:
         out.write(final)
     out.close()
