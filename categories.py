@@ -31,6 +31,8 @@ def main():
 
     # Get dictionaries
     gene, meaning = gene_count(fh_in1, fh_in2)
+    print(len(gene))
+    print(len(meaning))
 
     # Prepare output variables
     header = "Category\tOccurrence\tDescription"
@@ -53,7 +55,7 @@ def main():
     fh_out.close()
 
 
-def gene_count(category, meaning):
+def gene_count(cat, meaning):
     """
     Returns two dictionaries with gene meanings and gene categories
     """
@@ -68,7 +70,7 @@ def gene_count(category, meaning):
     dictionary = {}
 
     # Store lines in list
-    for line in category:
+    for line in cat:
         lines.append(line.split("\t"))
 
     # Store gene categories

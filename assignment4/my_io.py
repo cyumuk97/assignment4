@@ -14,6 +14,6 @@ def get_fh(filename=None, openfile=None):
         newfile = open(filename, openfile)
         return newfile
     except IOError:
-        raise IOError(f"Cannot open the file {filename} for type '{openfile}'")
+        raise IOError(f"Cannot open the file '{filename}' for type '{openfile}'")
     except ValueError:
-        raise ValueError(f"Cannot open the file {filename} for type '{openfile}'")
+        raise ValueError(f"Cannot open the file '{filename}' for type '{openfile}'")

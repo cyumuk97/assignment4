@@ -30,6 +30,9 @@ def main():
 
     # Get sets
     chromosome, hugo, common = get_sets(fh_in1, fh_in2)
+    print(len(chromosome))
+    print(len(hugo))
+    print(len(common))
 
     # Output
     string = "Number of unique gene names in chr21_genes.txt: "
@@ -40,7 +43,7 @@ def main():
 
     # Path to output directory
     # Save path
-    save = '/OUTPUT'
+    save = 'OUTPUT/'
 
     # Out path
     out = os.path.join(save, outfile)
