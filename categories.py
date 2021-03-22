@@ -9,51 +9,49 @@ import argparse
 import os.path
 from assignment4 import my_io
 
+
 def main():
     """
     Main function
     """
     args = get_cli_args()
-    I1 = args.INFILE1
-    I2 = args.INFILE2
+    in_1 = args.INFILE1
+    in_2 = args.INFILE2
 
     # Input files
-    I1 = "chr21_genes.txt"
-    I2 = "chr21_genes_categories.txt"
+    in_1 = "chr21_genes.txt"
+    in_2 = "chr21_genes_categories.txt"
 
     # Output file
     outfile = "categories.txt"
 
     # Get file objects with get_fh
-    fh_in1 = my_io.get_fh(I1, "r")
-    fh_in2 = my_io.get_fh(I2, "r")
+    fh_in1 = my_io.get_fh(in_1, "r")
+    fh_in2 = my_io.get_fh(in_2, "r")
 
     # Get dictionaries
-    GD, DM = gene_count(fh_in1, fh_in2)
+    gene, meaning = gene_count(fh_in1, fh_in2)
 
     # Prepare output variables
     header = "Category\tOccurrence\tDescription"
     info = ""
 
     # Add to info
-    for (k, v) in GD.items():
-        info += str(k) + "\t" + str(v) + "\t" + str(DM[k]) + "\n"
-
-    # Create final output
-    final = header + "\n" + info
+    for (key, value) in gene.items():
+        info += str(key) + "\t" + str(value) + "\t" + str(meaning[key]) + "\n"
 
     # Path to output directory
-    
     # Save path
-    SP = 'OUTPUT/'
+    save = 'OUTPUT/'
 
     # Out path
-    OP = os.path.join(SP, outfile)
+    out = os.path.join(save, outfile)
 
     # Write to file
-    fh_out = my_io.get_fh(outfile, "w")
-    fh_out.write(final)
+    fh_out = my_io.get_fh(out, "w")
+    fh_out.write(header + "\n" + info)
     fh_out.close()
+
 
 def gene_count(category, meaning):
     """
@@ -61,47 +59,48 @@ def gene_count(category, meaning):
     """
 
     # Initiate a list to store data from file
-    GL = []
+    lines = []
 
     # Initiate a list to store gene categories
-    GC = []
+    category = []
 
     # Initiate a dictionary
-    GD = {}
+    dictionary = {}
 
     # Store lines in list
     for line in category:
-        GL.append(line.split("\t"))
+        lines.append(line.split("\t"))
 
     # Store gene categories
-    for i in range(1, len(GL)):
-        GC.append(GL[i][2].replace('\n', ''))
+    for i in range(1, len(lines)):
+        category.append(lines[i][2].replace('\n', ''))
 
     # Sort gene categories
-    GC.sort()
+    category.sort()
 
     # Store categories in category dictionary
-    for category in GC[1:]:
-        GD[category] = GD.get(category,0) + 1
+    for categories in category[1:]:
+        dictionary[categories] = dictionary.get(categories, 0) + 1
 
     # Create a list for the file of gene meanings
-    GM = []
+    meanings = []
 
     # Store lines in gene meaning list
     for line in meaning:
-        GM.append(line.split("\t"))
+        meanings.append(line.split("\t"))
 
     # Turn gene meanings list into a dictionary
-    DM = dict(GM)
+    mean = dict(meanings)
 
-    return GD, DM
+    return dictionary, mean
+
 
 def get_cli_args():
     """
     Gets command line options using argparse
     """
     parser = argparse.ArgumentParser(
-            description='Combine on gene name and count the category occurrence')
+        description='Combine on gene name and count the category occurrence')
 
     parser.add_argument('-i1', '--infile1',
                         dest='INFILE1',
@@ -116,6 +115,7 @@ def get_cli_args():
                         required=True)
 
     return parser.parse_args()
+
 
 if __name__ == '__main__':
     main()

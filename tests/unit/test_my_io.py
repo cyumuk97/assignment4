@@ -6,11 +6,17 @@ Tests the programs
 """
 import os
 import pytest
-from ../../assignment4 import my_io
+#from /home/yumuk.c/programming6200/assignment4 import my_io
 from chr21_gene_names import get_gene_names
 from categories import gene_count
 from intersection import get_sets
 
+# Directory
+basepath = '/home/yumuk.c/programming6200/assignment4/'
+with os.scandir(basepath) as entries:
+    for entry in entries:
+        if entry.is_file():
+            print(entry.name)
 # Files to test
 chromosome = "../chr21_genes.txt"
 chromosome_categories = "../chr21_genes_categories.txt"

@@ -7,6 +7,7 @@ Asks user to enter a gene symbol and prints its description
 import argparse
 from assignment4 import my_io
 
+
 def main():
     """
     Main function
@@ -21,58 +22,59 @@ def main():
     fh_in = my_io.get_fh(infile, "r")
 
     # Get Dictionary
-    D = get_gene_names(fh_in)
+    dictionary = get_gene_names(fh_in)
 
     # Initiate a loop for inputs
     while True:
-        GI = input("Enter gene name of interest. Type quit to exit: ")
+        gene = input("Enter gene name of interest. Type quit to exit: ")
 
-        if GI.lower() == "quit":
+        if gene.lower() == "quit":
             print("Thanks for querying the data.")
             break
 
-        if GI in D:
-            print(GI + " " + "found! Here is the description:")
-            print(D[GI])
+        if gene in dictionary:
+            print(gene + " " + "found! Here is the description:")
+            print(dictionary[gene])
 
         else:
             print("Not a valid gene name")
+
 
 def get_gene_names(filename):
 
     """
     Returns a dictionary that stores gene names
     """
-    
     # Initiate a list to store data from file
-    GL = []
+    data = []
 
     # Initiate a list to store gene symbols
-    GS = []
+    symbol = []
 
     # Initiate a list to store gene descriptions
-    GD = []
+    description = []
 
     # Open the file and store the information in gene_list
     for line in filename:
-        GL.append(line.split("\t"))
+        data.append(line.split("\t"))
 
     # Store gene symbols in gene_symbol
-    for i in range(1, len(GL)):
-        GS.append(GL[i][0])
+    for i in range(1, len(data)):
+        symbol.append(data[i][0])
 
     # Store gene descriptions in gene_description
-    for j in range(1, len(GL)):
-        GD.append(GL[j][1])
+    for j in range(1, len(data)):
+        description.append(data[j][1])
 
     # Initiate a dictionary
-    D = dict.fromkeys(GS)
+    dictionary = dict.fromkeys(symbol)
 
     # Enter values to dictionary
-    for i in range(len(D)):
-        D[GS[i]] = GD[i]
+    for i in range(len(dictionary)):
+        dictionary[symbol[i]] = description[i]
 
-    return D
+    return dictionary
+
 
 def get_cli_args():
     """
@@ -89,6 +91,7 @@ def get_cli_args():
                         required=True)
 
     return parser.parse_args()
+
 
 if __name__ == '__main__':
     main()
