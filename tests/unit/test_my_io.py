@@ -6,24 +6,44 @@ Tests the programs
 """
 import os
 import pytest
-from assignment4 import (chr21_gene_names, categories, intersection)
+from ../../assignment4 import my_io
+from chr21_gene_names import get_gene_names
+from categories import gene_count
+from intersection import get_sets
 
-test = "test_21.txt"
+# Files to test
+chromosome = "../chr21_genes.txt"
+chromosome_categories = "../chr21_genes_categories.txt"
+hugo = "../HUGO_genes.txt"
 
-def test_chr21_gene_names():
+test1 = "test_21.txt"
+test2 = "test_categories.txt"
+test3 = "test_intersection.txt"
+
+def test_get_gene_names():
     """
-    Tests chr21_gene_name.py
+    Tests get_gene_names
     """
-    infile = _create_test_file("chr21_genes.txt", test)
+    # Create test file
+    _create_test_file(test1)
+
+    # Test the function
+    test = my_io.get_fh(test1, "r")
+    D = get_gene_names(chromosome)
+    assert len(D) == 285
+
+def test_gene_count():
+    """
+    Tests gene_count function
+    """
+    # Create test file
+    _create_test_file(test2)
+
+    # Test the function
 
 
-
-    # Test
-    test_chr21 = chr21_gene_names(
-
-def _create_test_file(filename, test):
+def _create_test_file(filename):
     """
     Helper function to create file for testing
     """
-    fh_in = open(filename, "r")
-    fh_out = open(test, "w")
+    open(filename, "w").close()
